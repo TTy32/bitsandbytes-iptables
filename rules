@@ -1,1 +1,3 @@
 ut2004 ; INOUT ; aux ; udp ; 7777,7787,7710-7720, 7771
+teamspeak ; OUT ; aux ; TCP ; 5414-5415, 10000
+ssh ; IN ; aux ; TCP ; 21
