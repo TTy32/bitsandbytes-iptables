@@ -1,3 +1,11 @@
+bitsandbytes-iptables
+#####################
+
+We initiated this project as CSF falled short for our needs. We have virtual network interfaces and we weren't able to apply rules on an IP-basis. Furthermore it is a big disadvatage for us to manage ports with CSF. We have many ports for our gameservers and having to add those to a big one-liner isn't going to cut it. So we decided to write our own IPtables rules. As writing many IPtables rules isnt very efficient this project was created.
+
+# Todo
+
+ * Feature: Advanced rules
 
 # Rule file explaination
 
