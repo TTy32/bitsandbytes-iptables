@@ -1,12 +1,70 @@
 #!/usr/bin/env php
 <?php
 
-$default1 = "-m state --state NEW,ESTABLISHED -j ACCEPT\n";
+class ruleset
+{
+	private $rules = Array();
+	
+	public function addRule($rule)
+	{
+		array_push ($this->rules, $rule . "\n");
+	}
+	public function getRuleset()
+	{
+		return $this->rules;
+	}
+}
 
-$output_lines = Array();
-$ipaddr;
+class rule
+{
+	private $rule_prefix = "iptables";
+	private $rule_direction; 				// Set by constructor
+	private $rule_direction_prefix = "-A";
+	private $rule_protocol; 				// Set by constructor
+	private $rule_protocol_prefix = "-p";
+	private $rule_ipaddr; 					// Set by constructor
+	private $rule_ipaddr_prefix; 			//Set by getRule
+	private $rule_port; 					// Set by constructor
+	private $rule_port_prefix; 				//Set by getRule
+	private $rule_suffix = "-m state --state NEW,ESTABLISHED -j ACCEPT";
 
-$lines = file ("rules");
+	private $rule;
+	function __construct($direction, $protocol, $ipaddr, $port)
+	{
+		if ($direction == "IN") { $direction = "INPUT"; }
+		if ($direction == "OUT") { $direction = "OUTPUT"; }
+		$this->rule_direction = $direction;
+		$this->rule_protocol = $protocol;
+		$this->rule_ipaddr = $ipaddr;
+		$this->rule_port = $port;
+	}
+	
+	public function getRule()
+	{
+		switch ($this->rule_direction)
+		{
+			case "INPUT":
+				$this->rule_ipaddr_prefix = "-d";
+				$this->rule_port_prefix = "--dport";
+			break;
+			case "OUTPUT":
+				$this->rule_ipaddr_prefix = "-s";
+				$this->rule_port_prefix = "--sport";
+			break;
+		}
+		$this->rule = 	$this->rule_prefix . " " . 
+						$this->rule_direction_prefix . " " . $this->rule_direction . " " . 
+						$this->rule_protocol_prefix . " " . $this->rule_protocol . " " . 
+						$this->rule_ipaddr_prefix . " " . $this->rule_ipaddr . " " . 
+						$this->rule_port_prefix . " " . $this->rule_port . " " . 
+						$this->rule_suffix;
+		return $this->rule;
+	}
+}
+
+$ruleset = new ruleset();
+
+$lines = file ("bb-rules");
 foreach ($lines as $key => $value) // Loop rules (lines)
 {
 	if (strpos($value, "#") != 1) // Check for comment line
@@ -27,8 +85,9 @@ foreach ($lines as $key => $value) // Loop rules (lines)
 		$stage2_rules_ports = strtoupper ($stage2_rules_ports);
 
 		$stage3_rules_ports = explode (",", $stage2_rules_ports);
+		$stage3_rules_ipaddr;
 
-		$lines_aliases = file ("bb-aliases");
+		$lines_aliases = file ("bb-ipaliases");
 		foreach ($lines_aliases as $key2 => $value2)
 		{
 			$stage1_alias = explode (";", $value2);
@@ -38,7 +97,7 @@ foreach ($lines as $key => $value) // Loop rules (lines)
 			
 			if ($stage1_alias[0] == $stage2_rules_ipalias)
 			{
-				$ipaddr = $stage1_alias[1];
+				$stage3_rules_ipaddr = $stage1_alias[1];
 			}
 		}
 		// Loop through ports (comma delimiter)
@@ -54,55 +113,44 @@ foreach ($lines as $key => $value) // Loop rules (lines)
 			{
 				switch ($stage2_rules_direction)
 				{
-					case "IN":
-						switch ($stage2_rules_protocol)
-						{
-							case "UDP":
-								array_push ($output_lines, "iptables -A INPUT  -p UDP -d " . $ipaddr . " --dport " . $individual_port . " " . $default1);
-							break;
-							case "TCP":
-								array_push ($output_lines, "iptables -A INPUT  -p TCP -d " . $ipaddr . " --dport " . $individual_port . " " . $default1);
-							break;
-							case "BOTH":
-								array_push ($output_lines, "iptables -A INPUT  -p UDP -d " . $ipaddr . " --dport " . $individual_port . " " . $default1);
-								array_push ($output_lines, "iptables -A INPUT  -p TCP -d " . $ipaddr . " --dport " . $individual_port . " " . $default1);
-							break;
-						}
-					break;
-					case "OUT":
-						switch ($stage2_rules_protocol)
-						{
-							case "UDP":
-								array_push ($output_lines, "iptables -A OUTPUT -p UDP -s " . $ipaddr . " --sport " . $individual_port . " " . $default1);
-							break;
-							case "TCP":
-								array_push ($output_lines, "iptables -A OUTPUT -p TCP -s " . $ipaddr . " --sport " . $individual_port . " " . $default1);
-							break;
-							case "BOTH":
-								array_push ($output_lines, "iptables -A OUTPUT -p UDP -s " . $ipaddr . " --sport " . $individual_port . " " . $default1);
-								array_push ($output_lines, "iptables -A OUTPUT -p TCP -s " . $ipaddr . " --sport " . $individual_port . " " . $default1);
-							break;
-						}
-					break;
+					
 					case "INOUT":
 						switch ($stage2_rules_protocol)
 						{
-							case "UDP":
-								array_push ($output_lines, "iptables -A OUTPUT -p UDP -s " . $ipaddr . " --sport " . $individual_port . " " . $default1);
-								array_push ($output_lines, "iptables -A INPUT  -p UDP -d " . $ipaddr . " --dport " . $individual_port . " " . $default1);
-							break;
-							case "TCP":
-								array_push ($output_lines, "iptables -A OUTPUT -p TCP -s " . $ipaddr . " --sport " . $individual_port . " " . $default1);
-								array_push ($output_lines, "iptables -A INPUT  -p TCP -d " . $ipaddr . " --dport " . $individual_port . " " . $default1);
-							break;
 							case "BOTH":
-								array_push ($output_lines, "iptables -A OUTPUT -p UDP -s " . $ipaddr . " --sport " . $individual_port . " " . $default1);
-								array_push ($output_lines, "iptables -A OUTPUT -p TCP -s " . $ipaddr . " --sport " . $individual_port . " " . $default1);
-								array_push ($output_lines, "iptables -A INPUT  -p UDP -d " . $ipaddr . " --dport " . $individual_port . " " . $default1);
-								array_push ($output_lines, "iptables -A INPUT  -p TCP -d " . $ipaddr . " --dport " . $individual_port . " " . $default1);
+								$rule = new rule("IN", "UDP", $stage3_rules_ipaddr, $individual_port);
+								$ruleset->addRule( $rule->getRule() );
+								$rule = new rule("IN", "TCP", $stage3_rules_ipaddr, $individual_port);
+								$ruleset->addRule( $rule->getRule() );
+								$rule = new rule("OUT", "UDP", $stage3_rules_ipaddr, $individual_port);
+								$ruleset->addRule( $rule->getRule() );
+								$rule = new rule("OUT", "TCP", $stage3_rules_ipaddr, $individual_port);
+								$ruleset->addRule( $rule->getRule() );
+							break;
+							default:
+								$rule = new rule("IN", $stage2_rules_protocol, $stage3_rules_ipaddr, $individual_port);
+								$ruleset->addRule( $rule->getRule() );
+								$rule = new rule("OUT", $stage2_rules_protocol, $stage3_rules_ipaddr, $individual_port);
+								$ruleset->addRule( $rule->getRule() );
 							break;
 						}
-						break;
+					break;
+
+					default:
+						switch ($stage2_rules_protocol)
+						{
+							case "BOTH":
+								$rule = new rule($stage2_rules_direction, "UDP", $stage3_rules_ipaddr, $individual_port);
+								$ruleset->addRule( $rule->getRule() );
+								$rule = new rule($stage2_rules_direction, "TCP", $stage3_rules_ipaddr, $individual_port);
+								$ruleset->addRule( $rule->getRule() );
+							break;
+							default:
+								$rule = new rule($stage2_rules_direction, $stage2_rules_protocol, $stage3_rules_ipaddr, $individual_port);
+								$ruleset->addRule( $rule->getRule() );
+							break;
+						}
+					break;
 				}
 
 			} // End of port range or individual port
@@ -110,7 +158,7 @@ foreach ($lines as $key => $value) // Loop rules (lines)
 	} // End of check loop
 } // End of file loop
 
-file_put_contents("test.rules", $output_lines);
+file_put_contents("test.rules", $ruleset->getRuleset() );
 
 // ut2004 ; INOUT ; aux ; udp ; 7777,7787,7710-7720, 7771
 
