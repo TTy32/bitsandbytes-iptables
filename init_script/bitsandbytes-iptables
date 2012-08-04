@@ -50,11 +50,17 @@ do_start()
 #
 do_stop()
 {
+
+
 	iptables -F
 	iptables -X
-	iptables -P INPUT DROP
-	iptables -P OUTPUT DROP
-	iptables -P FORWARD DROP
+	iptables -t nat -F
+	iptables -t nat -X
+	iptables -t mangle -F
+	iptables -t mangle -X
+	iptables -P INPUT ACCEPT
+	iptables -P FORWARD ACCEPT
+	iptables -P OUTPUT ACCEPT
 }
 
 #
