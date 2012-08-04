@@ -9,18 +9,20 @@ $ruleset = new ruleset();
 $file_bbrules = file ($filename["bb-rules"]);
 foreach ($file_bbrules as $key => $value) // Loop rules (lines)
 {
-	if (strpos($value, "#") != 1) // Check for comment line
+
+	
+	if (substr(trim($value), 0, 1) != '#' && ctype_space($value) == FALSE) // Check for comment line
 	{
 		$bbrules_line = new parseLine($value);
 		$bbrules_line_elements = $bbrules_line->getElements();
+	
+	if (empty($bbrules_line_elements[4])) { errorDispatcher(2); }
 		
 		$bbrules_line_element_description = $bbrules_line_elements[0];
 		$bbrules_line_element_direction = $bbrules_line_elements[1];
 		$bbrules_line_element_ipalias = $bbrules_line_elements[2];
 		$bbrules_line_element_protocol = $bbrules_line_elements[3];
 		$bbrules_line_element_ports = $bbrules_line_elements[4];
-
-		if (empty($bbrules_line_element_ports)) { errorDispatcher(2); }
 		
 		// Add descriptive comments
 		$ruleset->addRule( "" );
@@ -34,24 +36,25 @@ foreach ($file_bbrules as $key => $value) // Loop rules (lines)
 		{
 			$bbipaliases_line = new parseLine($value2);
 			$bbipaliases_line_elements = $bbipaliases_line->getElements();
-
 			if ($bbipaliases_line_elements[0] == $bbrules_line_element_ipalias)
 			{
 				$bbrules_line_element_ipaddr = $bbipaliases_line_elements[1];
 			}
-			if (empty($bbrules_line_element_ipaddr)) { errorDispatcher(1); }
 		}
+		if (empty($bbrules_line_element_ipaddr)) { errorDispatcher(1); }
+
 		// Loop through ports (comma delimiter)
 		foreach ($bbrules_line_element_ports_explodebycomma as $key => $value)
 		{
-			$stage4_rules_ports = explode ("-", $value);
+			$bbrules_line_element_ports_explodebydash = explode ("-", $value);
 			$individual_port;
-			if (empty($stage4_rules_ports[1])) // Make sure to iterate the for loop once in case of an individual port
+			if (empty($bbrules_line_element_ports_explodebydash[1])) // Make sure to iterate the for loop once in case of an individual port
 			{
-				$stage4_rules_ports[1] = $stage4_rules_ports[0];
+				$bbrules_line_element_ports_explodebydash[1] = $bbrules_line_element_ports_explodebydash[0];
 			}
-			for ($individual_port = $stage4_rules_ports[0]; $individual_port <= $stage4_rules_ports[1]; $individual_port++) // Loop through range of ports. In case of a single port the for loop is iterated once.
+			for ($individual_port = $bbrules_line_element_ports_explodebydash[0]; $individual_port <= $bbrules_line_element_ports_explodebydash[1]; $individual_port++) // Loop through range of ports. In case of a single port the for loop is iterated once.
 			{
+				$individual_port = trim($individual_port); // Whitespace fix
 				switch ($bbrules_line_element_direction)
 				{
 					
