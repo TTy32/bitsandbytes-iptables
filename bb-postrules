@@ -1,3 +1,0 @@
-iptables -A INPUT   -j DROP
-iptables -A OUTPUT  -j DROP
-iptables -A FORWARD -j DROP
