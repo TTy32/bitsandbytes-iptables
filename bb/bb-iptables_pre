@@ -11,3 +11,35 @@ iptables -P FORWARD DROP
 iptables -A INPUT  -i lo -j ACCEPT
 iptables -A OUTPUT -o lo -j ACCEPT
 
+### User rules ###
+
+# Randy: Allow 443 out on .76
+iptables -A OUTPUT -p tcp --dport 443 -s 212.153.70.76 -m state --state NEW,ESTABLISHED -j ACCEPT
+iptables -A INPUT -p tcp -d 212.153.70.76 -m state --state NEW,ESTABLISHED -j ACCEPT
+
+
+# Randy: Allow outgoing ping on .76. ICMP-type 8 = request, ICMP-type 0 = reply
+# Aleen gateway enablen foor .76 in interfaces! (voor source-ip in packet header)
+iptables -A OUTPUT -p ICMP --icmp-type 8 -s 212.153.70.76 -m state --state NEW,ESTABLISHED -j ACCEPT
+iptables -A INPUT -p ICMP  --icmp-type 0 -d 212.153.70.76 -m state --state NEW,ESTABLISHED -j ACCEPT
+# En incoming ping voor .76
+iptables -A OUTPUT -p ICMP --icmp-type 0 -s 212.153.70.76 -m state --state NEW,ESTABLISHED -j ACCEPT
+iptables -A INPUT -p ICMP  --icmp-type 8 -d 212.153.70.76 -m state --state NEW,ESTABLISHED -j ACCEPT
+
+# ssh out .76
+iptables -A OUTPUT -p tcp -s 212.153.70.76 --dport 22 -m state --state NEW,ESTABLISHED -j ACCEPT
+
+# DNS OUT on 212.153.70.76 
+# Randy: onderstaande gecommente rules werken niet, deze wel:
+iptables -A OUTPUT -p udp -d 8.8.8.8 --dport 53 -s 212.153.70.76 -m state --state NEW,ESTABLISHED -j ACCEPT
+iptables -A INPUT  -p udp -d 212.153.70.76 -s 8.8.8.8 -m state --state NEW,ESTABLISHED -j ACCEPT
+
+# OpenVPN Gateway
+iptables -A INPUT  -i tap0 -j ACCEPT
+iptables -A OUTPUT -o tap0 -j ACCEPT
+
+# OpenVPN Layer2
+iptables -A INPUT  -i tap1 -j ACCEPT
+iptables -A OUTPUT -o tap1 -j ACCEPT
+
+

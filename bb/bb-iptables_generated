@@ -1,41 +1,63 @@
 
-# UT2004
-iptables -A INPUT  -p UDP -d 212.153.70.76 --dport 7777 -m state --state NEW,ESTABLISHED -j ACCEPT
-iptables -A OUTPUT -p UDP -s 212.153.70.76 --sport 7777 -m state --state NEW,ESTABLISHED -j ACCEPT
-iptables -A INPUT  -p UDP -d 212.153.70.76 --dport 7787 -m state --state NEW,ESTABLISHED -j ACCEPT
-iptables -A OUTPUT -p UDP -s 212.153.70.76 --sport 7787 -m state --state NEW,ESTABLISHED -j ACCEPT
-iptables -A INPUT  -p UDP -d 212.153.70.76 --dport 7710 -m state --state NEW,ESTABLISHED -j ACCEPT
-iptables -A OUTPUT -p UDP -s 212.153.70.76 --sport 7710 -m state --state NEW,ESTABLISHED -j ACCEPT
-iptables -A INPUT  -p UDP -d 212.153.70.76 --dport 7711 -m state --state NEW,ESTABLISHED -j ACCEPT
-iptables -A OUTPUT -p UDP -s 212.153.70.76 --sport 7711 -m state --state NEW,ESTABLISHED -j ACCEPT
-iptables -A INPUT  -p UDP -d 212.153.70.76 --dport 7712 -m state --state NEW,ESTABLISHED -j ACCEPT
-iptables -A OUTPUT -p UDP -s 212.153.70.76 --sport 7712 -m state --state NEW,ESTABLISHED -j ACCEPT
-iptables -A INPUT  -p UDP -d 212.153.70.76 --dport 7713 -m state --state NEW,ESTABLISHED -j ACCEPT
-iptables -A OUTPUT -p UDP -s 212.153.70.76 --sport 7713 -m state --state NEW,ESTABLISHED -j ACCEPT
-iptables -A INPUT  -p UDP -d 212.153.70.76 --dport 7714 -m state --state NEW,ESTABLISHED -j ACCEPT
-iptables -A OUTPUT -p UDP -s 212.153.70.76 --sport 7714 -m state --state NEW,ESTABLISHED -j ACCEPT
-iptables -A INPUT  -p UDP -d 212.153.70.76 --dport 7715 -m state --state NEW,ESTABLISHED -j ACCEPT
-iptables -A OUTPUT -p UDP -s 212.153.70.76 --sport 7715 -m state --state NEW,ESTABLISHED -j ACCEPT
-iptables -A INPUT  -p UDP -d 212.153.70.76 --dport 7716 -m state --state NEW,ESTABLISHED -j ACCEPT
-iptables -A OUTPUT -p UDP -s 212.153.70.76 --sport 7716 -m state --state NEW,ESTABLISHED -j ACCEPT
-iptables -A INPUT  -p UDP -d 212.153.70.76 --dport 7717 -m state --state NEW,ESTABLISHED -j ACCEPT
-iptables -A OUTPUT -p UDP -s 212.153.70.76 --sport 7717 -m state --state NEW,ESTABLISHED -j ACCEPT
-iptables -A INPUT  -p UDP -d 212.153.70.76 --dport 7718 -m state --state NEW,ESTABLISHED -j ACCEPT
-iptables -A OUTPUT -p UDP -s 212.153.70.76 --sport 7718 -m state --state NEW,ESTABLISHED -j ACCEPT
-iptables -A INPUT  -p UDP -d 212.153.70.76 --dport 7719 -m state --state NEW,ESTABLISHED -j ACCEPT
-iptables -A OUTPUT -p UDP -s 212.153.70.76 --sport 7719 -m state --state NEW,ESTABLISHED -j ACCEPT
-iptables -A INPUT  -p UDP -d 212.153.70.76 --dport 7720 -m state --state NEW,ESTABLISHED -j ACCEPT
-iptables -A OUTPUT -p UDP -s 212.153.70.76 --sport 7720 -m state --state NEW,ESTABLISHED -j ACCEPT
-iptables -A INPUT  -p UDP -d 212.153.70.76 --dport  7771 -m state --state NEW,ESTABLISHED -j ACCEPT
-iptables -A OUTPUT -p UDP -s 212.153.70.76 --sport  7771 -m state --state NEW,ESTABLISHED -j ACCEPT
-
-# TEAMSPEAK
-iptables -A OUTPUT -p TCP -s 212.153.70.76 --sport 5414 -m state --state NEW,ESTABLISHED -j ACCEPT
-iptables -A OUTPUT -p TCP -s 212.153.70.76 --sport 5415 -m state --state NEW,ESTABLISHED -j ACCEPT
-iptables -A OUTPUT -p TCP -s 212.153.70.76 --sport  10000 -m state --state NEW,ESTABLISHED -j ACCEPT
+# APACHE
+iptables -A INPUT  -p TCP -d 212.153.70.8 --dport 80 -m state --state NEW,ESTABLISHED -j ACCEPT
+iptables -A OUTPUT -p TCP -s 212.153.70.8 --sport 80 -m state --state NEW,ESTABLISHED -j ACCEPT
+iptables -A INPUT  -p TCP -d 212.153.70.8 --dport 443 -m state --state NEW,ESTABLISHED -j ACCEPT
+iptables -A OUTPUT -p TCP -s 212.153.70.8 --sport 443 -m state --state NEW,ESTABLISHED -j ACCEPT
 
 # SSH
-iptables -A INPUT  -p TCP -d 212.153.70.76 --dport 21 -m state --state NEW,ESTABLISHED -j ACCEPT
+iptables -A INPUT  -p TCP -d 212.153.70.76 --dport 22 -m state --state NEW,ESTABLISHED -j ACCEPT
+iptables -A OUTPUT -p TCP -s 212.153.70.76 --sport 22 -m state --state NEW,ESTABLISHED -j ACCEPT
+
+# OPENVPN
+iptables -A INPUT -p UDP  212.153.70.76  1194 -m state --state NEW,ESTABLISHED -j ACCEPT
+iptables -A INPUT -p UDP  212.153.70.76  1195 -m state --state NEW,ESTABLISHED -j ACCEPT
+iptables -A INPUT -p UDP  212.153.70.76  1196 -m state --state NEW,ESTABLISHED -j ACCEPT
+
+# UT3
+iptables -A INPUT  -p UDP -d 212.153.70.76 --dport 7777 -m state --state NEW,ESTABLISHED -j ACCEPT
+iptables -A OUTPUT -p UDP -s 212.153.70.76 --sport 7777 -m state --state NEW,ESTABLISHED -j ACCEPT
+iptables -A INPUT  -p UDP -d 212.153.70.76 --dport 6500 -m state --state NEW,ESTABLISHED -j ACCEPT
+iptables -A OUTPUT -p UDP -s 212.153.70.76 --sport 6500 -m state --state NEW,ESTABLISHED -j ACCEPT
+iptables -A INPUT  -p UDP -d 212.153.70.76 --dport 13000 -m state --state NEW,ESTABLISHED -j ACCEPT
+iptables -A OUTPUT -p UDP -s 212.153.70.76 --sport 13000 -m state --state NEW,ESTABLISHED -j ACCEPT
+iptables -A INPUT  -p UDP -d 212.153.70.76 --dport 43621 -m state --state NEW,ESTABLISHED -j ACCEPT
+iptables -A OUTPUT -p UDP -s 212.153.70.76 --sport 43621 -m state --state NEW,ESTABLISHED -j ACCEPT
+iptables -A INPUT  -p UDP -d 212.153.70.76 --dport 49531 -m state --state NEW,ESTABLISHED -j ACCEPT
+iptables -A OUTPUT -p UDP -s 212.153.70.76 --sport 49531 -m state --state NEW,ESTABLISHED -j ACCEPT
+
+# UT3
+iptables -A INPUT -p TCP  212.153.70.76  9020 -m state --state NEW,ESTABLISHED -j ACCEPT
+iptables -A INPUT -p TCP  212.153.70.76  53891 -m state --state NEW,ESTABLISHED -j ACCEPT
+iptables -A INPUT -p TCP  212.153.70.76  29900 -m state --state NEW,ESTABLISHED -j ACCEPT
+
+# UT2004_FBDG
+iptables -A INPUT  -p UDP -d 212.153.70.76 --dport 7773 -m state --state NEW,ESTABLISHED -j ACCEPT
+iptables -A OUTPUT -p UDP -s 212.153.70.76 --sport 7773 -m state --state NEW,ESTABLISHED -j ACCEPT
+iptables -A INPUT  -p UDP -d 212.153.70.76 --dport 7774 -m state --state NEW,ESTABLISHED -j ACCEPT
+iptables -A OUTPUT -p UDP -s 212.153.70.76 --sport 7774 -m state --state NEW,ESTABLISHED -j ACCEPT
+iptables -A INPUT  -p UDP -d 212.153.70.76 --dport 7783 -m state --state NEW,ESTABLISHED -j ACCEPT
+iptables -A OUTPUT -p UDP -s 212.153.70.76 --sport 7783 -m state --state NEW,ESTABLISHED -j ACCEPT
+iptables -A INPUT  -p UDP -d 212.153.70.76 --dport 7784 -m state --state NEW,ESTABLISHED -j ACCEPT
+iptables -A OUTPUT -p UDP -s 212.153.70.76 --sport 7784 -m state --state NEW,ESTABLISHED -j ACCEPT
+iptables -A INPUT  -p UDP -d 212.153.70.76 --dport 10777 -m state --state NEW,ESTABLISHED -j ACCEPT
+iptables -A OUTPUT -p UDP -s 212.153.70.76 --sport 10777 -m state --state NEW,ESTABLISHED -j ACCEPT
+iptables -A INPUT  -p UDP -d 212.153.70.76 --dport 11777 -m state --state NEW,ESTABLISHED -j ACCEPT
+iptables -A OUTPUT -p UDP -s 212.153.70.76 --sport 11777 -m state --state NEW,ESTABLISHED -j ACCEPT
+
+# UT2004_FBDG
+iptables -A INPUT  -p TCP -d 212.153.70.76 --dport 9192 -m state --state NEW,ESTABLISHED -j ACCEPT
+iptables -A OUTPUT -p TCP -s 212.153.70.76 --sport 9192 -m state --state NEW,ESTABLISHED -j ACCEPT
+iptables -A INPUT  -p TCP -d 212.153.70.76 --dport 28902 -m state --state NEW,ESTABLISHED -j ACCEPT
+iptables -A OUTPUT -p TCP -s 212.153.70.76 --sport 28902 -m state --state NEW,ESTABLISHED -j ACCEPT
+
+# TEAMSPEAK
+iptables -A INPUT  -p UDP -d 212.153.70.76 --dport 5414 -m state --state NEW,ESTABLISHED -j ACCEPT
+iptables -A OUTPUT -p UDP -s 212.153.70.76 --sport 5414 -m state --state NEW,ESTABLISHED -j ACCEPT
+
+# TEAMSPEAK
+iptables -A INPUT -p TCP  212.153.70.76  51234 -m state --state NEW,ESTABLISHED -j ACCEPT
+iptables -A INPUT -p TCP  212.153.70.76  14534 -m state --state NEW,ESTABLISHED -j ACCEPT
 
 # Blocklist
 iptables -A INPUT -s 2.56.0.0/14 -j DROP
