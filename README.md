@@ -6,6 +6,8 @@ We initiated this project as CSF falled short for our needs. We have virtual net
 # Todo
 
  * Feature: Advanced rules
+ * Feature: Better syntax checking on Rules
+ * Feature: Debian INIT script
 
 # Rule file explaination
 
