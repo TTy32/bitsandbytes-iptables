@@ -86,6 +86,11 @@ Protocol that applies for the rule
 * UDP
 * TCP
 * BOTH
+* ICMP
+
+Specify BOTH to indicate TCP and UDP.
+
+For ICMP you must omit the port element
 
 ### Port(s)
 
