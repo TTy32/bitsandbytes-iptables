@@ -82,14 +82,14 @@ foreach ($file_bbrules as $key => $value) // Loop rules (lines)
 						switch ($bbrules_line_element_protocol)
 						{
 							case "BOTH":
-								$rule = new rule("INPUT", "TCP", "-d", $bbrules_line_element_ipaddr, "--dport", $individual_port, "ESTABLISHED"); $ruleset->addRule( $rule->getRule() );
+								$rule = new rule("INPUT", "TCP", "-d", $bbrules_line_element_ipaddr, "--sport", $individual_port, "ESTABLISHED"); $ruleset->addRule( $rule->getRule() );
 								$rule = new rule("OUTPUT", "TCP", "-s", $bbrules_line_element_ipaddr, "--dport", $individual_port); $ruleset->addRule( $rule->getRule() );
-								$rule = new rule("INPUT", "UDP", "-d", $bbrules_line_element_ipaddr, "--dport", $individual_port, "ESTABLISHED"); $ruleset->addRule( $rule->getRule() );
+								$rule = new rule("INPUT", "UDP", "-d", $bbrules_line_element_ipaddr, "--sport", $individual_port, "ESTABLISHED"); $ruleset->addRule( $rule->getRule() );
 								$rule = new rule("OUTPUT", "UDP", "-s", $bbrules_line_element_ipaddr, "--dport", $individual_port); $ruleset->addRule( $rule->getRule() );
 							break;
 							case "TCP":
 							case "UDP":
-								$rule = new rule("INPUT", $bbrules_line_element_protocol, "-d", $bbrules_line_element_ipaddr, "--dport", $individual_port, "ESTABLISHED"); $ruleset->addRule( $rule->getRule() );
+								$rule = new rule("INPUT", $bbrules_line_element_protocol, "-d", $bbrules_line_element_ipaddr, "--sport", $individual_port, "ESTABLISHED"); $ruleset->addRule( $rule->getRule() );
 								$rule = new rule("OUTPUT", $bbrules_line_element_protocol, "-s", $bbrules_line_element_ipaddr, "--dport", $individual_port); $ruleset->addRule( $rule->getRule() );
 							break;
 							case "ICMP":
