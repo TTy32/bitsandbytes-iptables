@@ -1,6 +1,6 @@
 <?php
 
-function errorDispatcher ($error)
+function errorDispatcher ($error, $additional = "")
 {
 	$error_string;
 	switch ($error)
@@ -22,7 +22,9 @@ function errorDispatcher ($error)
 #		break;
 	}
 
-	echo "ERROR: " . $error_string;
+	$erroronline = "";
+	if (!empty($additional)) { $erroronline = " on line " . $additional; }
+	echo "\nERROR" . $erroronline . ": " . $error_string . "\n";
 	die ();
 }
 

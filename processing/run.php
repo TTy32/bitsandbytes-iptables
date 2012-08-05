@@ -14,7 +14,7 @@ foreach ($file_bbrules as $key => $value) // Loop rules (lines)
 		$bbrules_line = new parseLine($value);
 		$bbrules_line_elements = $bbrules_line->getElements();
 	
-	if (empty($bbrules_line_elements[3])) { errorDispatcher(2); }
+	if (empty($bbrules_line_elements[3])) { errorDispatcher(2, $key); }
 		
 		$bbrules_line_element_description = $bbrules_line_elements[0];
 		$bbrules_line_element_direction = $bbrules_line_elements[1];
@@ -39,7 +39,7 @@ foreach ($file_bbrules as $key => $value) // Loop rules (lines)
 				$bbrules_line_element_ipaddr = $bbipaliases_line_elements[1];
 			}
 		}
-		if (empty($bbrules_line_element_ipaddr)) { errorDispatcher(1); }
+		if (empty($bbrules_line_element_ipaddr)) { errorDispatcher(1, $key); }
 
 		// Loop through ports (comma delimiter)
 		foreach ($bbrules_line_element_ports_explodebycomma as $key => $value)
@@ -74,7 +74,7 @@ foreach ($file_bbrules as $key => $value) // Loop rules (lines)
 								$rule = new rule("OUTPUT", $bbrules_line_element_protocol, "-s", $bbrules_line_element_ipaddr, "", "", "ESTABLISHED", "--icmp-type 0"); $ruleset->addRule( $rule->getRule() );
 							break;
 							default:
-								errorDispatcher(3);
+								errorDispatcher(3, $key);
 							break;
 						}
 					break;
@@ -97,12 +97,12 @@ foreach ($file_bbrules as $key => $value) // Loop rules (lines)
 								$rule = new rule("OUTPUT", $bbrules_line_element_protocol, "-s", $bbrules_line_element_ipaddr, "", "", "NEW,ESTABLISHED", "--icmp-type 8"); $ruleset->addRule( $rule->getRule() );
 							break;
 							default:
-								errorDispatcher(3);
+								errorDispatcher(3, $key);
 							break;
 						}
 					break;
 					default:
-						errorDispatcher(4);
+						errorDispatcher(4, $key);
 					break;
 				}
 
