@@ -7,7 +7,6 @@ We initiated this project as CSF falled short for our needs. We have virtual net
 
  * Feature: Advanced rules
  * Feature: Better syntax checking on Rules
- * Feature: Specify ALL in ip rules to match any ip address
 
 # Installation
 
