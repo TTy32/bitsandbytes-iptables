@@ -7,7 +7,6 @@ We initiated this project as CSF falled short for our needs. We have virtual net
 
  * Feature: Advanced rules
  * Feature: Better syntax checking on Rules
- * Feature: Debian INIT script
  * Feature: Specify ALL in ip rules to match any ip address
 
 # Installation
@@ -64,13 +63,17 @@ The rule file consists of line-separeted rules. Each rule consists of semicolon-
 
 Description of the rule
 
-### Direction
+### Connection originate
 
-Allowed directions for the rule
+Deprecated: Direction (INOUT)
+
+Instead of specifying a direction, it makes more sense to specify what the origin of the connection is, because for IN or OUT both an INPUT and OUTPUT iptables rule is required. By removing the INOUT directive we remove any ambiguousness that the combination INOUT / IN / OUT may imply. Not to mention that in the light of security different iptables rules are needed for IN or OUT.
+If you want a combination of the new IN / OUT, you are required to specify seperate rules in bb-rules. This is also what you might want, as for security you want to make clear that both connections originating from inside or outside are allowed.
+
+Connection originate (in respect to IP-alias):
 
 * IN
 * OUT
-* INOUT
 
 ### IP-alias
 
