@@ -9,8 +9,6 @@ $ruleset = new ruleset();
 $file_bbrules = file ($filename["bb-rules"]);
 foreach ($file_bbrules as $key => $value) // Loop rules (lines)
 {
-
-	
 	if (substr(trim($value), 0, 1) != '#' && ctype_space($value) == FALSE) // Check for comment line
 	{
 		$bbrules_line = new parseLine($value);
@@ -66,9 +64,13 @@ foreach ($file_bbrules as $key => $value) // Loop rules (lines)
 								$rule = new rule("INPUT", "UDP", "-d", $bbrules_line_element_ipaddr, "--dport", $individual_port);	$ruleset->addRule( $rule->getRule() );
 								$rule = new rule("OUTPUT", "UDP", "-s", $bbrules_line_element_ipaddr, "--sport", $individual_port, "ESTABLISHED"); $ruleset->addRule( $rule->getRule() );
 							break;
-							default:
+							case "TCP":
+							case "UDP":
 								$rule = new rule("INPUT", $bbrules_line_element_protocol, "-d", $bbrules_line_element_ipaddr, "--dport", $individual_port);	$ruleset->addRule( $rule->getRule() );
 								$rule = new rule("OUTPUT", $bbrules_line_element_protocol, "-s", $bbrules_line_element_ipaddr, "--sport", $individual_port, "ESTABLISHED"); $ruleset->addRule( $rule->getRule() );
+							break;
+							default:
+								errorDispatcher(3);
 							break;
 						}
 					break;
@@ -81,11 +83,18 @@ foreach ($file_bbrules as $key => $value) // Loop rules (lines)
 								$rule = new rule("INPUT", "UDP", "-d", $bbrules_line_element_ipaddr, "--dport", $individual_port, "ESTABLISHED"); $ruleset->addRule( $rule->getRule() );
 								$rule = new rule("OUTPUT", "UDP", "-s", $bbrules_line_element_ipaddr, "--dport", $individual_port); $ruleset->addRule( $rule->getRule() );
 							break;
-							default:
+							case "TCP":
+							case "UDP":
 								$rule = new rule("INPUT", $bbrules_line_element_protocol, "-d", $bbrules_line_element_ipaddr, "--dport", $individual_port, "ESTABLISHED"); $ruleset->addRule( $rule->getRule() );
 								$rule = new rule("OUTPUT", $bbrules_line_element_protocol, "-s", $bbrules_line_element_ipaddr, "--dport", $individual_port); $ruleset->addRule( $rule->getRule() );
 							break;
+							default:
+								errorDispatcher(3);
+							break;
 						}
+					break;
+					default:
+						errorDispatcher(4);
 					break;
 				}
 
