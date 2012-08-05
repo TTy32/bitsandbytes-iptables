@@ -1,12 +1,16 @@
 # Web
-apache ; INOUT ; web ; TCP ; 80,443
+apache ; IN ; web ; TCP ; 80,443
 
 # aux
-ssh ; INOUT ; aux ; TCP ; 22
-openvpn ; INPUT ; aux ; UDP ; 1194-1196
-ut3 ; INOUT ; aux ; UDP ; 7777,6500,13000,43621,49531
-ut3 ; INPUT ; aux ; TCP ; 9020,53891,29900
-ut2004_fbdg ; INOUT ; aux ; UDP ; 7773,7774,7783,7784,10777,11777
-ut2004_fbdg ; INOUT ; aux ; TCP ; 9192,28902
-teamspeak ; INOUT ; aux ; UDP ; 5414
-teamspeak ; INPUT ; aux ; TCP ; 51234,14534
+# OUT
+
+# IRC out
+irc ; OUT ; aux ; TCP ; 6669
+ping ; IN ; aux ; ICMP
+ping ; OUT ; aux ; ICMP
+
+# IN
+
+# aux
+ssh ; IN ; aux ; TCP ; 22
+teamspeak ; IN ; aux ; TCP ; 11000-11010

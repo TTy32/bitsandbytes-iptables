@@ -9,14 +9,12 @@ $ruleset = new ruleset();
 $file_bbrules = file ($filename["bb-rules"]);
 foreach ($file_bbrules as $key => $value) // Loop rules (lines)
 {
-
-	
 	if (substr(trim($value), 0, 1) != '#' && ctype_space($value) == FALSE) // Check for comment line
 	{
 		$bbrules_line = new parseLine($value);
 		$bbrules_line_elements = $bbrules_line->getElements();
 	
-	if (empty($bbrules_line_elements[4])) { errorDispatcher(2); }
+	if (empty($bbrules_line_elements[3])) { errorDispatcher(2, $key); }
 		
 		$bbrules_line_element_description = $bbrules_line_elements[0];
 		$bbrules_line_element_direction = $bbrules_line_elements[1];
@@ -41,12 +39,12 @@ foreach ($file_bbrules as $key => $value) // Loop rules (lines)
 				$bbrules_line_element_ipaddr = $bbipaliases_line_elements[1];
 			}
 		}
-		if (empty($bbrules_line_element_ipaddr)) { errorDispatcher(1); }
+		if (empty($bbrules_line_element_ipaddr)) { errorDispatcher(1, $key); }
 
 		// Loop through ports (comma delimiter)
-		foreach ($bbrules_line_element_ports_explodebycomma as $key => $value)
+		foreach ($bbrules_line_element_ports_explodebycomma as $key3 => $value3)
 		{
-			$bbrules_line_element_ports_explodebydash = explode ("-", $value);
+			$bbrules_line_element_ports_explodebydash = explode ("-", $value3);
 			$individual_port;
 			if (empty($bbrules_line_element_ports_explodebydash[1])) // Make sure to iterate the for loop once in case of an individual port
 			{
@@ -57,43 +55,54 @@ foreach ($file_bbrules as $key => $value) // Loop rules (lines)
 				$individual_port = trim($individual_port); // Whitespace fix
 				switch ($bbrules_line_element_direction)
 				{
-					
-					case "INOUT":
+					case "IN": // Deprecated: INOUT
 						switch ($bbrules_line_element_protocol)
 						{
 							case "BOTH":
-								$rule = new rule("IN", "UDP", $bbrules_line_element_ipaddr, $individual_port);
-								$ruleset->addRule( $rule->getRule() );
-								$rule = new rule("IN", "TCP", $bbrules_line_element_ipaddr, $individual_port);
-								$ruleset->addRule( $rule->getRule() );
-								$rule = new rule("OUT", "UDP", $bbrules_line_element_ipaddr, $individual_port);
-								$ruleset->addRule( $rule->getRule() );
-								$rule = new rule("OUT", "TCP", $bbrules_line_element_ipaddr, $individual_port);
-								$ruleset->addRule( $rule->getRule() );
+								$rule = new rule("INPUT", "TCP", "-d", $bbrules_line_element_ipaddr, "--dport", $individual_port);	$ruleset->addRule( $rule->getRule() );
+								$rule = new rule("OUTPUT", "TCP", "-s", $bbrules_line_element_ipaddr, "--sport", $individual_port, "ESTABLISHED"); $ruleset->addRule( $rule->getRule() );
+								$rule = new rule("INPUT", "UDP", "-d", $bbrules_line_element_ipaddr, "--dport", $individual_port);	$ruleset->addRule( $rule->getRule() );
+								$rule = new rule("OUTPUT", "UDP", "-s", $bbrules_line_element_ipaddr, "--sport", $individual_port, "ESTABLISHED"); $ruleset->addRule( $rule->getRule() );
+							break;
+							case "TCP":
+							case "UDP":
+								$rule = new rule("INPUT", $bbrules_line_element_protocol, "-d", $bbrules_line_element_ipaddr, "--dport", $individual_port);	$ruleset->addRule( $rule->getRule() );
+								$rule = new rule("OUTPUT", $bbrules_line_element_protocol, "-s", $bbrules_line_element_ipaddr, "--sport", $individual_port, "ESTABLISHED"); $ruleset->addRule( $rule->getRule() );
+							break;
+							case "ICMP":
+								$rule = new rule("INPUT", $bbrules_line_element_protocol, "-d", $bbrules_line_element_ipaddr, "", "", "NEW,ESTABLISHED", "--icmp-type 8"); $ruleset->addRule( $rule->getRule() );
+								$rule = new rule("OUTPUT", $bbrules_line_element_protocol, "-s", $bbrules_line_element_ipaddr, "", "", "ESTABLISHED", "--icmp-type 0"); $ruleset->addRule( $rule->getRule() );
 							break;
 							default:
-								$rule = new rule("IN", $bbrules_line_element_protocol, $bbrules_line_element_ipaddr, $individual_port);
-								$ruleset->addRule( $rule->getRule() );
-								$rule = new rule("OUT", $bbrules_line_element_protocol, $bbrules_line_element_ipaddr, $individual_port);
-								$ruleset->addRule( $rule->getRule() );
+								errorDispatcher(3, $key);
 							break;
 						}
 					break;
-
-					default:
+					case "OUT": // Deprecated: INOUT
 						switch ($bbrules_line_element_protocol)
 						{
 							case "BOTH":
-								$rule = new rule($bbrules_line_element_direction, "UDP", $bbrules_line_element_ipaddr, $individual_port);
-								$ruleset->addRule( $rule->getRule() );
-								$rule = new rule($bbrules_line_element_direction, "TCP", $bbrules_line_element_ipaddr, $individual_port);
-								$ruleset->addRule( $rule->getRule() );
+								$rule = new rule("INPUT", "TCP", "-d", $bbrules_line_element_ipaddr, "--sport", $individual_port, "ESTABLISHED"); $ruleset->addRule( $rule->getRule() );
+								$rule = new rule("OUTPUT", "TCP", "-s", $bbrules_line_element_ipaddr, "--dport", $individual_port); $ruleset->addRule( $rule->getRule() );
+								$rule = new rule("INPUT", "UDP", "-d", $bbrules_line_element_ipaddr, "--sport", $individual_port, "ESTABLISHED"); $ruleset->addRule( $rule->getRule() );
+								$rule = new rule("OUTPUT", "UDP", "-s", $bbrules_line_element_ipaddr, "--dport", $individual_port); $ruleset->addRule( $rule->getRule() );
+							break;
+							case "TCP":
+							case "UDP":
+								$rule = new rule("INPUT", $bbrules_line_element_protocol, "-d", $bbrules_line_element_ipaddr, "--sport", $individual_port, "ESTABLISHED"); $ruleset->addRule( $rule->getRule() );
+								$rule = new rule("OUTPUT", $bbrules_line_element_protocol, "-s", $bbrules_line_element_ipaddr, "--dport", $individual_port); $ruleset->addRule( $rule->getRule() );
+							break;
+							case "ICMP":
+								$rule = new rule("INPUT", $bbrules_line_element_protocol, "-d", $bbrules_line_element_ipaddr, "", "", "ESTABLISHED", "--icmp-type 0"); $ruleset->addRule( $rule->getRule() );
+								$rule = new rule("OUTPUT", $bbrules_line_element_protocol, "-s", $bbrules_line_element_ipaddr, "", "", "NEW,ESTABLISHED", "--icmp-type 8"); $ruleset->addRule( $rule->getRule() );
 							break;
 							default:
-								$rule = new rule($bbrules_line_element_direction, $bbrules_line_element_protocol, $bbrules_line_element_ipaddr, $individual_port);
-								$ruleset->addRule( $rule->getRule() );
+								errorDispatcher(3, $key);
 							break;
 						}
+					break;
+					default:
+						errorDispatcher(4, $key);
 					break;
 				}
 

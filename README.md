@@ -1,7 +1,12 @@
 bitsandbytes-iptables
-#####################
+---------------------
 
 We initiated this project as CSF falled short for our needs. We have virtual network interfaces and we weren't able to apply rules on an IP-basis. Furthermore it is a big disadvatage for us to manage ports with CSF. We have many ports for our gameservers and having to add those to a big one-liner isn't going to cut it. So we decided to write our own IPtables rules. As writing many IPtables rules isnt very efficient this project was created.
+
+# Todo
+
+ * Feature: Advanced rules
+ * Feature: Better syntax checking on Rules
 
 # Installation
 
@@ -19,7 +24,7 @@ As said in installation, the repo contains 3 folders:
 bb contains all the customizable files.
 
  * bb-blocklist (here you can enter IP adresses that will be dropped, one per line)
- * bb-conf (doesn't do anything right now, will be updated)
+ * bb-conf (doesn''t do anything right now, will be updated)
  * bb-ipaliases (contains a list of semicolon separated alias and ip adresses. You can then use the aliases in bb-rules)
  * bb-iptables_generated (Contains all the generated rules from bb-rules)
  * bb-iptables_post (Contains direct iptables statements that will be executed after bb-iptables_generated)
@@ -47,12 +52,6 @@ Calling this script with "stop" flushes all the rules and will allow all connect
 
 Calling this script with "restart" calls start and stop one after another.
 
-# Todo
-
- * Feature: Advanced rules
- * Feature: Better syntax checking on Rules
- * Feature: Debian INIT script
-
 # bb-rules file explaination
 
 The rule file consists of line-separeted rules. Each rule consists of semicolon-separated elements. The elements are explained below.
@@ -63,17 +62,21 @@ The rule file consists of line-separeted rules. Each rule consists of semicolon-
 
 Description of the rule
 
-### Direction
+### Connection originate
 
-Allowed directions for the rule
+Deprecated: Direction (INOUT)
+
+Instead of specifying a direction, it makes more sense to specify what the origin of the connection is, because for IN or OUT both an INPUT and OUTPUT iptables rule is required. By removing the INOUT directive we remove any ambiguousness that the combination INOUT / IN / OUT may imply. Not to mention that in the light of security different iptables rules are needed for IN or OUT.
+If you want a combination of the new IN / OUT, you are required to specify seperate rules in bb-rules. This is also what you might want, as for security you want to make clear that both connections originating from inside or outside are allowed.
+
+Connection originate (in respect to IP-alias):
 
 * IN
 * OUT
-* INOUT
 
 ### IP-alias
 
-Alias for the ip-based rule. ALL can be specified for all IP addresses.
+Alias for the ip-based rule. Must match in file <bb-ipaliases> 
 
 ### Protocol
 
@@ -82,6 +85,11 @@ Protocol that applies for the rule
 * UDP
 * TCP
 * BOTH
+* ICMP
+
+Specify BOTH to indicate TCP and UDP.
+
+For ICMP you must omit the port element
 
 ### Port(s)
 
