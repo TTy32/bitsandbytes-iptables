@@ -1,9 +1,16 @@
 # Web
 apache ; IN ; web ; TCP ; 80,443
 
-# irc out
+# aux
+# OUT
+
+# IRC out
 irc ; OUT ; aux ; TCP ; 6669
+ping ; IN ; aux ; ICMP
+ping ; OUT ; aux ; ICMP
+
+# IN
 
 # aux
-ssh ; INOUT ; aux ; TCP ; 22
-teamspeak ; INPUT ; aux ; TCP ; 11000-11010
+ssh ; IN ; aux ; TCP ; 22
+teamspeak ; IN ; aux ; TCP ; 11000-11010

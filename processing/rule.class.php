@@ -17,7 +17,7 @@ class rule
 	private $rule_suffix = "-j ACCEPT";		// Default
 
 	private $rule;
-	function __construct($chain, $protocol, $ipaddr_prefix, $ipaddr, $port_prefix, $port, $state, $extra)
+	function __construct($chain, $protocol, $ipaddr_prefix, $ipaddr, $port_prefix, $port, $state = "", $extra = "")
 	{
 		$this->rule_chain = $chain;
 		$this->rule_protocol = $protocol;

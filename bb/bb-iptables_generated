@@ -1,29 +1,49 @@
 
 # APACHE
-iptables -A INPUT -p TCP -d 212.153.70.8 --dport 80 -m state --state NEW,ESTABLISHED -j ACCEPT
-iptables -A OUTPUT -p TCP -s 212.153.70.8 --sport 80 -m state --state ESTABLISHED -j ACCEPT
-iptables -A INPUT -p TCP -d 212.153.70.8 --dport 443 -m state --state NEW,ESTABLISHED -j ACCEPT
-iptables -A OUTPUT -p TCP -s 212.153.70.8 --sport 443 -m state --state ESTABLISHED -j ACCEPT
+iptables -A INPUT -p TCP -d 212.153.70.8 --dport 80 -m state --state NEW,ESTABLISHED  -j ACCEPT
+iptables -A OUTPUT -p TCP -s 212.153.70.8 --sport 80 -m state --state ESTABLISHED  -j ACCEPT
+iptables -A INPUT -p TCP -d 212.153.70.8 --dport 443 -m state --state NEW,ESTABLISHED  -j ACCEPT
+iptables -A OUTPUT -p TCP -s 212.153.70.8 --sport 443 -m state --state ESTABLISHED  -j ACCEPT
 
 # IRC
-iptables -A INPUT -p TCP -d 212.153.70.76 --dport 6669 -m state --state ESTABLISHED -j ACCEPT
-iptables -A OUTPUT -p TCP -s 212.153.70.76 --dport 6669 -m state --state NEW,ESTABLISHED -j ACCEPT
+iptables -A INPUT -p TCP -d 212.153.70.76 --dport 6669 -m state --state ESTABLISHED  -j ACCEPT
+iptables -A OUTPUT -p TCP -s 212.153.70.76 --dport 6669 -m state --state NEW,ESTABLISHED  -j ACCEPT
+
+# PING
+iptables -A INPUT -p ICMP -d 212.153.70.76   -m state --state NEW,ESTABLISHED --icmp-type 8 -j ACCEPT
+iptables -A OUTPUT -p ICMP -s 212.153.70.76   -m state --state ESTABLISHED --icmp-type 0 -j ACCEPT
+
+# PING
+iptables -A INPUT -p ICMP -d 212.153.70.76   -m state --state ESTABLISHED --icmp-type 0 -j ACCEPT
+iptables -A OUTPUT -p ICMP -s 212.153.70.76   -m state --state NEW,ESTABLISHED --icmp-type 8 -j ACCEPT
 
 # SSH
-
-# OPENVPN
-
-# UT3
-
-# UT3
-
-# UT2004_FBDG
-
-# UT2004_FBDG
+iptables -A INPUT -p TCP -d 212.153.70.76 --dport 22 -m state --state NEW,ESTABLISHED  -j ACCEPT
+iptables -A OUTPUT -p TCP -s 212.153.70.76 --sport 22 -m state --state ESTABLISHED  -j ACCEPT
 
 # TEAMSPEAK
-
-# TEAMSPEAK
+iptables -A INPUT -p TCP -d 212.153.70.76 --dport 11000 -m state --state NEW,ESTABLISHED  -j ACCEPT
+iptables -A OUTPUT -p TCP -s 212.153.70.76 --sport 11000 -m state --state ESTABLISHED  -j ACCEPT
+iptables -A INPUT -p TCP -d 212.153.70.76 --dport 11001 -m state --state NEW,ESTABLISHED  -j ACCEPT
+iptables -A OUTPUT -p TCP -s 212.153.70.76 --sport 11001 -m state --state ESTABLISHED  -j ACCEPT
+iptables -A INPUT -p TCP -d 212.153.70.76 --dport 11002 -m state --state NEW,ESTABLISHED  -j ACCEPT
+iptables -A OUTPUT -p TCP -s 212.153.70.76 --sport 11002 -m state --state ESTABLISHED  -j ACCEPT
+iptables -A INPUT -p TCP -d 212.153.70.76 --dport 11003 -m state --state NEW,ESTABLISHED  -j ACCEPT
+iptables -A OUTPUT -p TCP -s 212.153.70.76 --sport 11003 -m state --state ESTABLISHED  -j ACCEPT
+iptables -A INPUT -p TCP -d 212.153.70.76 --dport 11004 -m state --state NEW,ESTABLISHED  -j ACCEPT
+iptables -A OUTPUT -p TCP -s 212.153.70.76 --sport 11004 -m state --state ESTABLISHED  -j ACCEPT
+iptables -A INPUT -p TCP -d 212.153.70.76 --dport 11005 -m state --state NEW,ESTABLISHED  -j ACCEPT
+iptables -A OUTPUT -p TCP -s 212.153.70.76 --sport 11005 -m state --state ESTABLISHED  -j ACCEPT
+iptables -A INPUT -p TCP -d 212.153.70.76 --dport 11006 -m state --state NEW,ESTABLISHED  -j ACCEPT
+iptables -A OUTPUT -p TCP -s 212.153.70.76 --sport 11006 -m state --state ESTABLISHED  -j ACCEPT
+iptables -A INPUT -p TCP -d 212.153.70.76 --dport 11007 -m state --state NEW,ESTABLISHED  -j ACCEPT
+iptables -A OUTPUT -p TCP -s 212.153.70.76 --sport 11007 -m state --state ESTABLISHED  -j ACCEPT
+iptables -A INPUT -p TCP -d 212.153.70.76 --dport 11008 -m state --state NEW,ESTABLISHED  -j ACCEPT
+iptables -A OUTPUT -p TCP -s 212.153.70.76 --sport 11008 -m state --state ESTABLISHED  -j ACCEPT
+iptables -A INPUT -p TCP -d 212.153.70.76 --dport 11009 -m state --state NEW,ESTABLISHED  -j ACCEPT
+iptables -A OUTPUT -p TCP -s 212.153.70.76 --sport 11009 -m state --state ESTABLISHED  -j ACCEPT
+iptables -A INPUT -p TCP -d 212.153.70.76 --dport 11010 -m state --state NEW,ESTABLISHED  -j ACCEPT
+iptables -A OUTPUT -p TCP -s 212.153.70.76 --sport 11010 -m state --state ESTABLISHED  -j ACCEPT
 
 # Blocklist
 iptables -A INPUT -s 2.56.0.0/14 -j DROP
