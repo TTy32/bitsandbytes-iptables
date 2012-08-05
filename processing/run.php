@@ -42,9 +42,9 @@ foreach ($file_bbrules as $key => $value) // Loop rules (lines)
 		if (empty($bbrules_line_element_ipaddr)) { errorDispatcher(1, $key); }
 
 		// Loop through ports (comma delimiter)
-		foreach ($bbrules_line_element_ports_explodebycomma as $key => $value)
+		foreach ($bbrules_line_element_ports_explodebycomma as $key3 => $value3)
 		{
-			$bbrules_line_element_ports_explodebydash = explode ("-", $value);
+			$bbrules_line_element_ports_explodebydash = explode ("-", $value3);
 			$individual_port;
 			if (empty($bbrules_line_element_ports_explodebydash[1])) // Make sure to iterate the for loop once in case of an individual port
 			{

@@ -23,7 +23,7 @@ function errorDispatcher ($error, $additional = "")
 	}
 
 	$erroronline = "";
-	if (!empty($additional)) { $erroronline = " on line " . $additional; }
+	if (!empty($additional)) { $erroronline = " on line " . ($additional + 1); }
 	echo "\nERROR" . $erroronline . ": " . $error_string . "\n";
 	die ();
 }
