@@ -14,7 +14,7 @@ foreach ($file_bbrules as $key => $value) // Loop rules (lines)
 		$bbrules_line = new parseLine($value);
 		$bbrules_line_elements = $bbrules_line->getElements();
 	
-	if (empty($bbrules_line_elements[4])) { errorDispatcher(2); }
+	if (empty($bbrules_line_elements[3])) { errorDispatcher(2); }
 		
 		$bbrules_line_element_description = $bbrules_line_elements[0];
 		$bbrules_line_element_direction = $bbrules_line_elements[1];
@@ -69,6 +69,10 @@ foreach ($file_bbrules as $key => $value) // Loop rules (lines)
 								$rule = new rule("INPUT", $bbrules_line_element_protocol, "-d", $bbrules_line_element_ipaddr, "--dport", $individual_port);	$ruleset->addRule( $rule->getRule() );
 								$rule = new rule("OUTPUT", $bbrules_line_element_protocol, "-s", $bbrules_line_element_ipaddr, "--sport", $individual_port, "ESTABLISHED"); $ruleset->addRule( $rule->getRule() );
 							break;
+							case "ICMP":
+								$rule = new rule("INPUT", $bbrules_line_element_protocol, "-d", $bbrules_line_element_ipaddr, "", "", "NEW,ESTABLISHED", "--icmp-type 8"); $ruleset->addRule( $rule->getRule() );
+								$rule = new rule("OUTPUT", $bbrules_line_element_protocol, "-s", $bbrules_line_element_ipaddr, "", "", "ESTABLISHED", "--icmp-type 0"); $ruleset->addRule( $rule->getRule() );
+							break;
 							default:
 								errorDispatcher(3);
 							break;
@@ -87,6 +91,10 @@ foreach ($file_bbrules as $key => $value) // Loop rules (lines)
 							case "UDP":
 								$rule = new rule("INPUT", $bbrules_line_element_protocol, "-d", $bbrules_line_element_ipaddr, "--dport", $individual_port, "ESTABLISHED"); $ruleset->addRule( $rule->getRule() );
 								$rule = new rule("OUTPUT", $bbrules_line_element_protocol, "-s", $bbrules_line_element_ipaddr, "--dport", $individual_port); $ruleset->addRule( $rule->getRule() );
+							break;
+							case "ICMP":
+								$rule = new rule("INPUT", $bbrules_line_element_protocol, "-d", $bbrules_line_element_ipaddr, "", "", "ESTABLISHED", "--icmp-type 0"); $ruleset->addRule( $rule->getRule() );
+								$rule = new rule("OUTPUT", $bbrules_line_element_protocol, "-s", $bbrules_line_element_ipaddr, "", "", "NEW,ESTABLISHED", "--icmp-type 8"); $ruleset->addRule( $rule->getRule() );
 							break;
 							default:
 								errorDispatcher(3);

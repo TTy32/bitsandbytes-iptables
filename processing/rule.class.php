@@ -12,11 +12,12 @@ class rule
 	private $rule_port; 					// Set by constructor
 	private $rule_port_prefix; 				// Set by constructor
 	private $rule_state = "NEW,ESTABLISHED";// May be set by constructor
+	private $rule_extra;					// May be set by constructor
 	private $rule_state_prefix = "-m state --state"; // Default
 	private $rule_suffix = "-j ACCEPT";		// Default
 
 	private $rule;
-	function __construct($chain, $protocol, $ipaddr_prefix, $ipaddr, $port_prefix, $port, $state)
+	function __construct($chain, $protocol, $ipaddr_prefix, $ipaddr, $port_prefix, $port, $state, $extra)
 	{
 		$this->rule_chain = $chain;
 		$this->rule_protocol = $protocol;
@@ -25,6 +26,7 @@ class rule
 		$this->rule_port_prefix = $port_prefix;
 		$this->rule_port = $port;
 		if (!empty($state)) { $this->rule_state = $state; }
+		if (!empty($extra)) { $this->rule_extra = $extra; }
 	}
 	
 	public function getRule()
@@ -35,6 +37,7 @@ class rule
 						$this->rule_ipaddr_prefix . " " . $this->rule_ipaddr . " " . 
 						$this->rule_port_prefix . " " . $this->rule_port . " " . 
 						$this->rule_state_prefix . " " . $this->rule_state . " " .
+						$this->rule_extra . " " .
 						$this->rule_suffix;
 		return $this->rule;
 	}
