@@ -7,6 +7,9 @@ We initiated this project as CSF falled short for our needs. We have virtual net
 
  * Feature: Advanced rules
  * Feature: Better syntax checking on Rules
+ * Feature: In-line comments (only comments on own line supported now)
+ * Feature: Automatic ascending ports sorting option in bb-conf for bb-rules
+ * Feature: Automatic ascii columns option in bb-conf for bb-rules
 
 # Installation
 
