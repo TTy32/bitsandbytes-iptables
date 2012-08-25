@@ -11,6 +11,7 @@ We initiated this project as CSF falled short for our needs. We have virtual net
  * Feature: Automatic ascending ports sorting option in bb-conf for bb-rules
  * Feature: Automatic ascii columns option in bb-conf for bb-rules
  * Feature: Print applied IPtables rules from bb-iptables_pre and bb-iptables_post
+ * Feature: Multiple IP addresses per alias
 
 # Installation
 
