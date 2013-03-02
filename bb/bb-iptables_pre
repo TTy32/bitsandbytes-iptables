@@ -1,4 +1,24 @@
-# Flush all
+# Iptables
+#  Flush All & set default policy's
+iptables -t filter -P FORWARD ACCEPT
+iptables -t filter -P INPUT ACCEPT
+iptables -t filter -P OUTPUT ACCEPT
+iptables -t mangle -P PREROUTING ACCEPT
+iptables -t mangle -P FORWARD ACCEPT
+iptables -t mangle -P INPUT ACCEPT
+iptables -t mangle -P OUTPUT ACCEPT
+iptables -t mangle -P POSTROUTING ACCEPT
+iptables -t nat -P PREROUTING ACCEPT
+iptables -t nat -P OUTPUT ACCEPT
+iptables -t nat -P POSTROUTING ACCEPT
+arptables -t filter -P INPUT ACCEPT
+arptables -t filter -P OUTPUT ACCEPT
+arptables -t filter -P FORWARD ACCEPT
+
+iptables -t filter -F
+iptables -t mangle -F
+iptables -t nat -F   
+
 iptables -F
 iptables -X
 
